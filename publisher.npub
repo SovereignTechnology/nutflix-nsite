@@ -1,0 +1,4 @@
+# The ONE key whose root nsite this is: a dedicated key, minted by Cameron in Bunker46, whose
+# connection may sign only kinds 15128, 10063, 10002 and 24242 (README "The key"). Never the
+# SovTech operator key: one root site per key, and that one is reserved for SovTech's own.
+# Put its npub on the line below (public key only; an nsec here is refused).

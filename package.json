@@ -1,0 +1,18 @@
+{
+  "name": "nutflix-nsite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Publish the Nutflix web client as an nsite (NIP-5A) to many Blossom servers and relays, and check it on many gateways.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "dependencies": {
+    "nostr-tools": "2.26.0",
+    "ws": "8.22.2"
+  }
+}

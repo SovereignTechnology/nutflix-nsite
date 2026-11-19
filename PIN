@@ -1,0 +1,25 @@
+# PIN: the Nutflix web client this repo publishes. The SAME values as sovtech/alpha
+# kata/nfxweb/site/pear/PEAR.pin (web.nutflix.xyz serves this exact tree; one agentrun build,
+# alpha's build-pear.sh, feeds both). README "Updating" says how to move it.
+#   pear <40 hex>                  SovereignTechnology/nutflix-pear commit (main)
+#   nfx <40 hex>                   the nfx library commit that pear commit's nfx-web.lock pins
+#   tree <64 hex>                  pear's SITE_TREE_SHA256: sha256 of `<sha256>  <path>\n` per file below;
+#                                  equals pear CI's (the `ci` run) and the Kata build's
+#   file <sha256> <bytes> <path>   every file of the site, bytewise order (publish.sh puts each at /<path>)
+#   tar <64 hex> <name>            alpha's ustar tar of exactly those files (publish.sh reads it)
+#   headers <64 hex>               sha256 of pear's site-headers.txt (what web.nutflix.xyz adds; a
+#                                  gateway sets its own, verify.sh checks they let the page run)
+#   ci <run id>                    the pear CI run whose SITE_TREE_SHA256 the tree equals
+pear 008b2f33f7059c4afc4871cae61d11140605f208
+nfx 491d35ec3c70e5bdd7b8871bb6a64946d4ed3761
+tree 98c822837de852230aeb78f24fb129697f9149bb0b0fb30171cb369dcd615640
+file a10869d2ea22ffe3f6a5109c523ae76a09709244bc02c2589483ce03af2cfd39 792530 app.js
+file e3832fc6d5fe6d6eec909244aca7e936da1a8ffcdba66eef0f86d489f442187d 1733 index.html
+file b2e1ef34aa806706b84f58ce0835f5b0239841f25d5152ae52e55336adac552b 737473 nfx/player.js
+file 246c3180da149c6dc267d0ae1232386d30d103754392f36228a32a00ba91b7f6 735105 nfx/wasm/nfx_wasm_bg.wasm
+file eca39c64d796afe9a5bcf717d7fb3ea0e841e00888648ddd6d49ed3db1a2d19e 4671 shell.css
+file ac8e7382dbef1abd482940b18ceb74cd32a7861f54598f48f7ac55588ad78f9e 3065 source.json
+file c0faa519d828fb422711b8c273f7d1020ba7261df68abb42b668584d1a0bba44 188304 ui.css
+tar 7e1f5f5fc49c75be1c4a260370055d7dfd5bda8105c62b32350905f8020af8b8 nutflix-web-site-008b2f33f705.ustar.tar
+headers 2682469e7e108eaffcc269bb30e5c31ee818812248a3453363a80a394ddc6fb2
+ci 44063623178

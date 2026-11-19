@@ -1,0 +1,8 @@
+# nsite gateways verify.sh checks: https://{npub}.<host>/ ({npub} is the publisher's npub).
+# Checked 2026-11-19: each answered its home page (nsite.cloud did not connect: left out).
+# Whether the page RUNS on one is verify.sh's job; gateways-status.md has its last answer.
+https://{npub}.sovpro.dev/     # ours: alpha's gateway (down until alpha's memory re-budget; the key must be allowlisted)
+https://{npub}.nsite.lol/
+https://{npub}.nosto.re/
+https://{npub}.nwb.tf/
+https://{npub}.nsite.run/      # described as a reference implementation, not a public gateway

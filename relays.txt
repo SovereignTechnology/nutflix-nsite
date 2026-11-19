@@ -1,0 +1,11 @@
+# Relays that get the signed events. One wss:// origin per line.
+#   wss://...          the manifest (kind 15128) AND the key's lists (10063 servers, 10002 relays)
+#   wss://... lists    the lists only: indexers, where gateways look up a key's relay list
+# The 10002 list publish.sh signs names the relays that ACCEPTED the manifest: that is where a
+# gateway will look for it.
+wss://relay.sovpro.dev         # ours: alpha's nsite pod (down until alpha's memory re-budget; allowlisted keys only)
+wss://relay.nsite.lol          # nsite.lol's gateway reads from it
+wss://relay.nutflix.xyz        # ours, on alpha (may refuse kinds it is not for; publish.sh reports it)
+wss://relay.damus.io
+wss://relay.primal.net
+wss://purplepag.es lists       # relay-list indexer
