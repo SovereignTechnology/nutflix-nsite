@@ -100,6 +100,8 @@ export async function serve(handler) {
  * A Blossom server (BUD-01/02/11 as far as publish.sh uses it). `mode`:
  *   'ok'          checks the token and stores the blob
  *   'std-only'    refuses base64url tokens with 401 (an older server), takes standard base64
+ *   'std-only-400'  the same refusal as a 400 naming the token's encoding
+ *   'type-400'    400 on every upload for its file type: not a token problem, never retried
  *   'lying'       answers a descriptor with another sha256
  *   'corrupting'  stores the blob, then serves other bytes
  *   'refusing'    403 on every upload, with an X-Reason carrying a terminal control sequence (8-bit CSI:
@@ -129,7 +131,17 @@ export async function blossom(mode = 'ok') {
         res.setHeader('x-reason', 'no \u009b31mred\u009b0m uploads');
         return res.end();
       }
+      if (mode === 'type-400') {
+        res.statusCode = 400;
+        res.setHeader('x-reason', 'unsupported content type');
+        return res.end();
+      }
       const token = /^Nostr (.+)$/.exec(req.headers.authorization ?? '')?.[1] ?? '';
+      if (mode === 'std-only-400' && (/[-_]/.test(token) || token.length % 4 !== 0)) {
+        res.statusCode = 400;
+        res.setHeader('x-reason', 'invalid base64 token');
+        return res.end();
+      }
       if (mode === 'std-only' && (/[-_]/.test(token) || token.length % 4 !== 0)) {
         res.statusCode = 401;
         return res.end();

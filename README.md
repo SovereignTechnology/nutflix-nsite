@@ -24,6 +24,7 @@ STUN and WebRTC work from any HTTPS origin. Saved settings start fresh on a new 
 | `gateways-status.md` | `verify.sh`'s last answer per gateway (written by it; commit it) |
 | `publish.sh` → `src/publish.mjs` | the publish flow |
 | `verify.sh` → `src/verify.mjs` | the gateway and relay checks |
+| `proof/` | the real-browser playback and startup-timing test, run in a Kata VM |
 | `test/` | `node --test`, run in a Kata VM (`kata-run`), never on a laptop |
 
 ## The key
@@ -109,10 +110,34 @@ gateway rewrites `gateways-status.md`; gateway text is escaped there so it stays
 
 ## Proof
 
-That the page *plays* on a gateway is proved in a browser, as for web.nutflix.xyz: sovtech/alpha
-`kata/nfxweb/proof/run-prove-live.sh --page-mesh --url <nsite URL>` (the `--url` option is still owed:
-plan `nutflix-nsite` step 6). Run it on our gateway and on one public gateway marked "works". It checks
-that the page plays, the selected pair goes to a mesh endpoint, and no tracker websocket opens.
+`proof/playback-vm.sh` plays the real video in headless Chromium, in a throwaway Kata VM, and times each
+stage of the startup:
+
+```sh
+kata-run --where agentrun --net --no-setup --timeout 3300 --max-wait 5400 -- \
+  bash proof/playback-vm.sh https://<npub>.nsite.lol/ https://<npub>.nwb.tf/ https://web.nutflix.xyz/
+```
+
+Each URL gets three kinds of run: Play pressed at once (`cold`), Play pressed after the seeder's beacon has
+arrived (`settled`), and the same in a browser whose WebRTC cannot use UDP (`nortc`).
+
+**Last run, 2026-11-22: 21 of 21 played past 8 s** on nsite.lol, nwb.tf and web.nutflix.xyz, with no page
+error and no CSP violation. Click to first frame:
+
+| Run | Click to first frame |
+|---|---|
+| `cold` | 44.7-55.3 s, of which 41.8-51.7 s is waiting for a beacon |
+| `settled` | 3.4-5.1 s |
+| `nortc` | 3.7-5.1 s, plus one 14.7 s outlier on nsite.lol |
+
+- **The slow start is the wait for a seeder's beacon** (the page's "Finding seeders…"). Beacons are
+  ephemeral and republished every 60 s, so the wait is anywhere from 0 to 60 s. The harness's runs follow
+  each other and fall into step with the beacon, which is why its `cold` waits all land near 45 s.
+- **WebRTC does not delay the first frame.** Blocking it changes nothing, and the first frame arrives
+  over HTTPS with at most 2 KB received over WebRTC. The mesh then connects and carries 3.5-20 MB within the
+  next 8 s.
+- **Not covered here:** alpha's stricter check that the selected pair names its mesh endpoint and that no
+  tracker websocket opens (`kata/nfxweb/proof/run-prove-live.sh`, which assumes web.nutflix.xyz's headers).
 
 ## Updating
 

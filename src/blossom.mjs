@@ -9,10 +9,12 @@ export const UPLOAD_TIMEOUT_MS = 60_000;
 export const FETCH_TIMEOUT_MS = 30_000;
 const DESCRIPTOR_MAX = 64 * 1024;
 const MAX_REDIRECTS = 3;
+const TOKEN_ENCODING = /base64|padding|token/i;
 
 /**
  * `Authorization: Nostr <token>`. BUD-11 says base64url without padding; servers written before
- * that decode standard base64, so a 401 is retried once in that form (same signed event).
+ * that decode standard base64, so a refused token is retried once in that form (same signed
+ * event): on a 401, or a 400 whose reason is about the token's encoding (TOKEN_ENCODING).
  */
 export function authHeader(event, style = 'url') {
   const json = JSON.stringify(event);
@@ -114,7 +116,7 @@ function put(server, file, auth, style, fetchImpl) {
  */
 export async function uploadBlob(server, file, auth, fetchImpl = fetch) {
   let res = await put(server, file, auth, 'url', fetchImpl);
-  if (res.status === 401) {
+  if (res.status === 401 || (res.status === 400 && TOKEN_ENCODING.test(res.headers.get('x-reason') ?? ''))) {
     await res.body?.cancel();
     res = await put(server, file, auth, 'std', fetchImpl);
   }
