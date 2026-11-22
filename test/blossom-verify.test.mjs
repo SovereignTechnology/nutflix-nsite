@@ -57,6 +57,16 @@ test('uploadAll: every blob on every server, each fetched back; bad servers are 
   assert.equal(servers[0].seen.puts, puts + files.length);
 });
 
+test('a 400 about the token encoding is retried in standard base64; a 400 about the file type is not', async () => {
+  const [enc, type] = await Promise.all([blossom('std-only-400'), blossom('type-400')]);
+  closers.push(enc.close, type.close);
+  const res = await uploadAll([enc, type], files, await tokens([enc, type]));
+  assert.equal(res[0].ok, true, JSON.stringify(res[0].blobs));
+  assert.equal(res[1].ok, false);
+  assert.match(res[1].blobs[0].why, /400: unsupported content type/);
+  assert.equal(type.seen.puts, files.length, 'one PUT per file: nothing re-sent to a server that refused the type');
+});
+
 test('redirects: only to a public https name, and only to the same hash', async () => {
   assert.ok(redirectTargetOk(new URL('https://cdn.example.org/x')));
   for (const u of ['http://cdn.example.org/x', 'https://127.0.0.1/x', 'https://[::1]/x', 'https://10.0.0.1/x',

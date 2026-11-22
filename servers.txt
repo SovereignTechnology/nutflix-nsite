@@ -2,11 +2,17 @@
 # key's kind 10063 list and the manifest's `server` tags). One https:// origin per line.
 # A server counts only if it holds ALL 7 blobs after the upload (publish.sh fetches each back and
 # hashes it); the others are left out of the manifest and the list for that run.
-# Checked 2026-11-19: each answered its home page. Upload terms are each operator's and can change.
+# A site needs a host that takes HTML, JavaScript, CSS, wasm and JSON. Most public Blossom servers
+# are media-only. Checked 2026-11-22 with a BUD-06 preflight (HEAD /upload, stores nothing) for each
+# real file; terms are each operator's and can change. Never relabel a file to get past a policy.
 https://blossom.sovpro.dev     # ours: alpha's nsite pod (down until alpha's memory re-budget; allowlisted keys only)
-https://blossom.band           # free uploads for anyone
-https://blossom.nostr.build    # free up to 20 MiB per file, no expiry
-https://blossom.primal.net
-https://nostr.download
-https://blossom.ditto.pub
-https://24242.io               # deletes blobs nobody fetched for 60 days: a backup copy, never the only one
+https://nostr.download         # held all 7 in the first publish
+https://blossom.ditto.pub      # held all 7 in the first publish
+https://blossom.data.haus      # preflight allows all five types
+https://blossom.yakihonne.com  # preflight allows all five types (with a standard-base64 token)
+#
+# Tried and left out, 2026-11-22:
+#   blossom.band, blossom.nostr.build, 24242.io, nostrcheck.me, cdn.nostrcheck.me   refuse these file types
+#   blossom.primal.net                                                              400 on all but JSON
+#   blossom.f7z.io, cdn.hzrd149.com, blossom.oxtr.dev, haven.girino.org             allowlisted keys only
+#   blossom.azzamo.net                                                              uploads disabled
