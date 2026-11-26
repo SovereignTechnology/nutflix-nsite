@@ -5,7 +5,8 @@ so that anyone's nsite infrastructure can serve it, not only ours:
 
 - **public Blossom servers** hold the 7 files (addressed by sha256);
 - **public relays** carry the signed manifest (kind 15128: path → sha256) and the key's lists;
-- **any nsite gateway** serves it at `https://<npub>.<gateway>/`.
+- **any nsite gateway** can serve it at `https://<npub>.<gateway>/` (where it runs today:
+  [`gateways-status.md`](gateways-status.md)).
 
 There is no app code here. The page is pear's web client (`SovereignTechnology/nutflix-pear`,
 `packages/app-web`): the exact tree `https://web.nutflix.xyz/` serves, pinned in [`PIN`](PIN). Peers don't
@@ -17,7 +18,7 @@ STUN and WebRTC work from any HTTPS origin. Saved settings start fresh on a new 
 | File | What |
 |---|---|
 | `PIN` | the site: pear commit, tree hash, every file's sha256 and size, the site tar's sha256. Same values as sovtech/alpha `kata/nfxweb/site/pear/PEAR.pin` |
-| `publisher.npub` | the dedicated publisher key (empty until it is minted: [The key](#the-key)) |
+| `publisher.npub` | the dedicated publisher key's npub, one line ([The key](#the-key)) |
 | `servers.txt` | Blossom servers, most trusted first |
 | `relays.txt` | relays; `lists` marks an indexer that gets only the key's lists |
 | `gateways.txt` | gateways `verify.sh` checks |
@@ -76,8 +77,9 @@ What the real run does, each step a stop if it fails (detail: `src/publish.mjs`'
    redirects are followed only to public `https` names carrying the same hash. A server counts only
    if it holds all 7.
 5. The manifest (kind 15128: `path` tags, the NIP-5A aggregate `x`, `server` tags naming only the servers
-   from step 4, title, source) and the key's server list (kind 10063), checked again and by `nak verify` when
-   nak is on PATH, then sent to every relay.
+   from step 4, title, description, source) and the key's server list (kind 10063), checked again and by
+   `nak verify` when nak is on PATH, then sent: the manifest to every relay not marked `lists`, the server
+   list to every relay.
 6. The key's relay list (kind 10002) naming the relays that accepted the manifest (where gateways look for
    it), sent to every relay, the `lists` indexers included.
 
@@ -121,8 +123,9 @@ kata-run --where agentrun --net --no-setup --timeout 3300 --max-wait 5400 -- \
 Each URL gets three kinds of run: Play pressed at once (`cold`), Play pressed after the seeder's beacon has
 arrived (`settled`), and the same in a browser whose WebRTC cannot use UDP (`nortc`).
 
-**Last run, 2026-11-22: 21 of 21 played past 8 s** on nsite.lol, nwb.tf and web.nutflix.xyz, with no page
-error and no CSP violation. Click to first frame:
+**Last run, 2026-11-22, on the previous pin (pear `008b2f3`): 21 of 21 played past 8 s** on nsite.lol,
+nwb.tf and web.nutflix.xyz, with no page error and no CSP violation. It has not been run again since pear
+`1e0fef5` was published on 2026-11-26. Click to first frame:
 
 | Run | Click to first frame |
 |---|---|

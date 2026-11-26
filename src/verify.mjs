@@ -11,7 +11,7 @@
 //     is only recorded: pear's page wraps the SRI-checked bytes in its own application/wasm Blob;
 //   - the page's CSP must allow what pear's own CSP allows (csp.mjs).
 // "works" means these static checks pass; whether the page PLAYS there is the browser proof
-// (sovtech/alpha run-prove-live.sh --page-mesh --url, README "Proof").
+// (proof/playback-vm.sh, README "Proof").
 import { writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
