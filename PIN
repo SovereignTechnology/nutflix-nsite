@@ -10,16 +10,16 @@
 #   headers <64 hex>               sha256 of pear's site-headers.txt (what web.nutflix.xyz adds; a
 #                                  gateway sets its own, verify.sh checks they let the page run)
 #   ci <run id>                    the pear CI run whose SITE_TREE_SHA256 the tree equals
-pear 008b2f33f7059c4afc4871cae61d11140605f208
-nfx 491d35ec3c70e5bdd7b8871bb6a64946d4ed3761
-tree 98c822837de852230aeb78f24fb129697f9149bb0b0fb30171cb369dcd615640
-file a10869d2ea22ffe3f6a5109c523ae76a09709244bc02c2589483ce03af2cfd39 792530 app.js
-file e3832fc6d5fe6d6eec909244aca7e936da1a8ffcdba66eef0f86d489f442187d 1733 index.html
-file b2e1ef34aa806706b84f58ce0835f5b0239841f25d5152ae52e55336adac552b 737473 nfx/player.js
-file 246c3180da149c6dc267d0ae1232386d30d103754392f36228a32a00ba91b7f6 735105 nfx/wasm/nfx_wasm_bg.wasm
-file eca39c64d796afe9a5bcf717d7fb3ea0e841e00888648ddd6d49ed3db1a2d19e 4671 shell.css
-file ac8e7382dbef1abd482940b18ceb74cd32a7861f54598f48f7ac55588ad78f9e 3065 source.json
-file c0faa519d828fb422711b8c273f7d1020ba7261df68abb42b668584d1a0bba44 188304 ui.css
-tar 7e1f5f5fc49c75be1c4a260370055d7dfd5bda8105c62b32350905f8020af8b8 nutflix-web-site-008b2f33f705.ustar.tar
+pear 1e0fef56da16ce981f18ced2b33ee3cf7288f4f6
+nfx 4b6095c2aea7f05e7ee384c478fb59857b4eac1d
+tree bbb04c7c77f2530555504022aec4fbd2dff36383d65286c9bc3452edd4684297
+file e587acf3350e905fadc4a61aa4bb9b7f18a646ba1945aed3545160ad1d8f23fd 840555 app.js
+file bb08c9bb094f91175026a8d73bb3225e2230260dce1fef3eed1284e5d46f01ca 1733 index.html
+file 454f62fb5938fa01befe4442134ff32e2ecb1bbe5452dd29a22595168aa882b0 771039 nfx/player.js
+file e385f9e1e0e2c4f214af1f92ccf286a5f332c0a2f7614acfcfed2e0b0baf1845 776043 nfx/wasm/nfx_wasm_bg.wasm
+file 35cde5751ac16c2dfc621645ae73ad06e285ac0ebded416af3de5a7e36db9104 5599 shell.css
+file f1e9c08936b41487896781e1b6043197d2ffc259e1c1378022fb4e7452a90779 3065 source.json
+file c4023e58396cab32ad52ef6877c61e1147e9b9b4b81325fab74b204e9de4102f 191310 ui.css
+tar 1ffa2c08cc686600ef858bccb73ef0c8ebe1384a6ae9b131452466b217770b90 nutflix-web-site-1e0fef56da16.ustar.tar
 headers 2682469e7e108eaffcc269bb30e5c31ee818812248a3453363a80a394ddc6fb2
-ci 44063623178
+ci 45670049311
