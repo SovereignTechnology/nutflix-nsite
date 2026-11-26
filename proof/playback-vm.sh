@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Inside a networked throwaway Kata VM: pinned node + Playwright Chromium, then proof/playback.mjs on each URL.
-#   laptop: kata-run --where agentrun --net --no-setup --timeout 2400 --max-wait 5400 -- bash proof/playback-vm.sh <https url>...
+#   laptop: kata-run --where agentrun --net --no-setup --timeout 3300 --max-wait 5400 -- bash proof/playback-vm.sh <https url>...
 # Refuses to run anywhere but the CI VM: it installs packages as root.
 set -uo pipefail
 [ "${GITLAB_CI:-}" = true ] && [ "$(id -u)" = 0 ] || { echo "playback-vm.sh runs only inside the kata-run job" >&2; exit 2; }
