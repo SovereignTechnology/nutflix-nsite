@@ -142,6 +142,39 @@ nwb.tf and web.nutflix.xyz, with no page error and no CSP violation. It has not 
 - **Not covered here:** alpha's stricter check that the selected pair names its mesh endpoint and that no
   tracker websocket opens (`kata/nfxweb/proof/run-prove-live.sh`, which assumes web.nutflix.xyz's headers).
 
+### The alpha-off drill
+
+The plan "Nutflix keeps working when alpha is unreachable" (2026-11-26) uses this drill as its acceptance
+gate. Once it passes, it runs before every PIN and publish here:
+
+```sh
+kata-run --where agentrun --net --no-setup --timeout 3300 --max-wait 5400 -- \
+  bash proof/playback-vm.sh --alpha-off https://<npub>.nsite.lol/ https://<npub>.nwb.tf/
+```
+
+alpha is cut off, and each run proves the cut first: neither `https://web.nutflix.xyz/` nor alpha's address
+may answer. The guest has no firewall rights, so the cut is made in the browser
+(`playback.mjs`, "How alpha is cut"):
+- alpha's names (`*.nutflix.xyz`; the apex is not alpha) resolve to an unroutable address, so connections hang
+  as they did in the outage. A second pass makes them not resolve at all.
+- requests to alpha's address are held, then failed.
+- no peer connection ever sees alpha's STUN servers or an ICE candidate at its address.
+
+A run passes when the Network feed lists both videos, the video plays 8 s with bytes over WebRTC, and no
+request to alpha got an answer. Each `RUN` line records the parts separately (`listOk`, `playOk`, `alphaFree`).
+
+**First run, 2026-11-27, on pin pear `1e0fef5`, home runner: the listing passes, playback fails, as expected.**
+The cut held in all 8 runs, and no request to alpha got an answer.
+- **Listing:** both videos were listed on nsite.lol and nwb.tf in every run, 11-14 s from navigation in the
+  unresolvable pass. That reading includes a short probe; `listMs`, added after this run, counts from opening
+  the feed.
+- **Playback:** no beacon for the video arrived, so no peer connection was attempted. Pear `1e0fef5` reads
+  beacons from relay.nutflix.xyz only. Pear #157 also reads them from the read relays, where booty announces
+  since 2026-11-26.
+- **Still missing for playback:** start-up files (hash list, playlists, inits) come only from alpha's HTTPS
+  origin until they come over WebRTC (W2 in the WebRTC-first plan).
+- **Not covered:** a punch from outside the home NAT. `kata-run --net` runs on the home runner only.
+
 ## Updating
 
 A new pear release moves alpha's `PEAR.pin` first (the pear session's `m5.sh site`). Then:
